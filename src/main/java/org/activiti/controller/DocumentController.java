@@ -1,13 +1,12 @@
 package org.activiti.controller;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.activiti.ApplicantRepository;
 import org.activiti.cargo.DocumentCargo;
 import org.activiti.cargo.DocumentRepository;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +29,7 @@ public class DocumentController {
     @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "/documents", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void ingestDocument(@RequestBody Map<String, String> data) {
+    public DocumentCargo ingestDocument(@RequestBody Map<String, String> data) {
 
         DocumentCargo doc = new DocumentCargo();
         doc.setTitle(data.get("title"));
@@ -41,6 +40,10 @@ public class DocumentController {
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("doc", doc);
         variables.put("input", "MyName");
-        runtimeService.startProcessInstanceByKey("myProcess", variables);
+        ProcessInstance proc =  runtimeService.startProcessInstanceByKey("documentIngestion", variables);
+        String docUUID = (String) proc.getProcessVariables().get("docUUID");
+        DocumentCargo retDoc = new DocumentCargo();
+        retDoc.setUuid(docUUID);
+        return retDoc;
     }
 }

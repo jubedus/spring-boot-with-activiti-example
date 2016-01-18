@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="documentIngestion" name="Document Ingestion" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="taskValidate"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="taskValidate" targetRef="taskSetDefault"></sequenceFlow>
+    <serviceTask id="taskValidate" name="Validate Properties" activiti:expression="#{validationTask.process(execution)}"></serviceTask>
+    <serviceTask id="taskSetDefault" name="Set Default Values" activiti:expression="#{defaultValuesTask.process(execution)}"></serviceTask>
+    <serviceTask id="taskImportDoc" name="Import Document" activiti:expression="#{ingestionTask.process(execution)}" activiti:resultVariableName="docUUID"></serviceTask>
+    <sequenceFlow id="flow4" sourceRef="taskSetDefault" targetRef="taskImportDoc"></sequenceFlow>
+    <serviceTask id="taskCreateS1" name="Create S1 record" activiti:expression="#{s1CreateTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow5" sourceRef="taskImportDoc" targetRef="taskCreateS1"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="taskCreateS1" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_documentIngestion">
+    <bpmndi:BPMNPlane bpmnElement="documentIngestion" id="BPMNPlane_documentIngestion">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="750.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskValidate" id="BPMNShape_taskValidate">
+        <omgdc:Bounds height="55.0" width="105.0" x="110.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskSetDefault" id="BPMNShape_taskSetDefault">
+        <omgdc:Bounds height="55.0" width="105.0" x="270.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskImportDoc" id="BPMNShape_taskImportDoc">
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskCreateS1" id="BPMNShape_taskCreateS1">
+        <omgdc:Bounds height="55.0" width="105.0" x="580.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="65.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="110.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="215.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="375.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="515.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="685.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="750.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
