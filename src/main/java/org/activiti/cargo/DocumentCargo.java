@@ -15,7 +15,9 @@ public class DocumentCargo {
 	private String type;
 	private String title;
 	private String uuid;
+	private String name;
 	
+
 	public String getType() {
 		return type;
 	}
@@ -40,5 +42,12 @@ public class DocumentCargo {
 	}
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

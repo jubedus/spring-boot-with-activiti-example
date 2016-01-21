@@ -3,55 +3,82 @@
   <process id="documentIngestion" name="Document Ingestion" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="taskValidate"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="taskValidate" targetRef="taskSetDefault"></sequenceFlow>
-    <serviceTask id="taskValidate" name="Validate Properties" activiti:expression="#{validationTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="taskValidateRequired"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="taskValidateRequiredBySource" targetRef="taskSetDefault"></sequenceFlow>
+    <serviceTask id="taskValidateRequired" name="Validate Required Properties" activiti:expression="#{validationTask.process(execution)}"></serviceTask>
     <serviceTask id="taskSetDefault" name="Set Default Values" activiti:expression="#{defaultValuesTask.process(execution)}"></serviceTask>
     <serviceTask id="taskImportDoc" name="Import Document" activiti:expression="#{ingestionTask.process(execution)}" activiti:resultVariableName="docUUID"></serviceTask>
-    <sequenceFlow id="flow4" sourceRef="taskSetDefault" targetRef="taskImportDoc"></sequenceFlow>
     <serviceTask id="taskCreateS1" name="Create S1 record" activiti:expression="#{s1CreateTask.process(execution)}"></serviceTask>
     <sequenceFlow id="flow5" sourceRef="taskImportDoc" targetRef="taskCreateS1"></sequenceFlow>
     <sequenceFlow id="flow6" sourceRef="taskCreateS1" targetRef="endevent1"></sequenceFlow>
+    <serviceTask id="taskValidateRequiredBySource" name="Validate Properties Required by Source" activiti:expression="#{validationTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow7" sourceRef="taskValidateRequired" targetRef="taskValidateRequiredBySource"></sequenceFlow>
+    <serviceTask id="taskValidateValues" name="Validate Values" activiti:expression="#{validationTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow8" sourceRef="taskSetDefault" targetRef="taskValidateValues"></sequenceFlow>
+    <serviceTask id="taskConstructName" name="Construct Document Name" activiti:expression="#{constructNameTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow9" sourceRef="taskValidateValues" targetRef="taskConstructName"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="taskConstructName" targetRef="taskImportDoc"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_documentIngestion">
     <bpmndi:BPMNPlane bpmnElement="documentIngestion" id="BPMNPlane_documentIngestion">
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="110.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="118.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="750.0" y="110.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="40.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="taskValidate" id="BPMNShape_taskValidate">
-        <omgdc:Bounds height="55.0" width="105.0" x="110.0" y="100.0"></omgdc:Bounds>
+      <bpmndi:BPMNShape bpmnElement="taskValidateRequired" id="BPMNShape_taskValidateRequired">
+        <omgdc:Bounds height="71.0" width="105.0" x="110.0" y="100.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="taskSetDefault" id="BPMNShape_taskSetDefault">
-        <omgdc:Bounds height="55.0" width="105.0" x="270.0" y="100.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="390.0" y="108.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="taskImportDoc" id="BPMNShape_taskImportDoc">
-        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="100.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="300.0" y="210.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="taskCreateS1" id="BPMNShape_taskCreateS1">
-        <omgdc:Bounds height="55.0" width="105.0" x="580.0" y="100.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="210.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskValidateRequiredBySource" id="BPMNShape_taskValidateRequiredBySource">
+        <omgdc:Bounds height="71.0" width="105.0" x="240.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskValidateValues" id="BPMNShape_taskValidateValues">
+        <omgdc:Bounds height="55.0" width="131.0" x="540.0" y="108.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskConstructName" id="BPMNShape_taskConstructName">
+        <omgdc:Bounds height="63.0" width="133.0" x="530.0" y="206.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
-        <omgdi:waypoint x="65.0" y="127.0"></omgdi:waypoint>
-        <omgdi:waypoint x="110.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="65.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="110.0" y="135.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="215.0" y="127.0"></omgdi:waypoint>
-        <omgdi:waypoint x="270.0" y="127.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-        <omgdi:waypoint x="375.0" y="127.0"></omgdi:waypoint>
-        <omgdi:waypoint x="410.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="345.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="135.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="515.0" y="127.0"></omgdi:waypoint>
-        <omgdi:waypoint x="580.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="300.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="205.0" y="237.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="685.0" y="127.0"></omgdi:waypoint>
-        <omgdi:waypoint x="750.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="100.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="75.0" y="237.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="215.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="240.0" y="135.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="495.0" y="135.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="135.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="605.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="596.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="530.0" y="237.0"></omgdi:waypoint>
+        <omgdi:waypoint x="405.0" y="237.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
