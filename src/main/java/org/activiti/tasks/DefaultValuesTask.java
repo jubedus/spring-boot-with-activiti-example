@@ -18,6 +18,10 @@ public class DefaultValuesTask {
 	        DocumentCargo doc = (DocumentCargo) execution.getVariable("doc");
 	        System.out.println("Doc type ="+doc.getType());
 	        
-	        docService.setDefaultValues(doc);
+	        if("invalid".equalsIgnoreCase(doc.getType())){
+	        	throw new RuntimeException("Unable to set default value");
+	        }else{
+	        	docService.setDefaultValues(doc);
+	        }
 	    }
 }

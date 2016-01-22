@@ -40,7 +40,17 @@ public class DocumentController {
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("doc", doc);
         variables.put("input", "MyName");
-        ProcessInstance proc =  runtimeService.startProcessInstanceByKey("documentIngestion", variables);
+        ProcessInstance proc = null;
+		try {
+			proc = runtimeService.startProcessInstanceByKey("documentIngestion", variables);
+		} catch (RuntimeException e) {
+			System.out.println("Caught exception in controller ...");
+			RuntimeException excToThrow = e;
+			if(e.getCause().getCause() instanceof RuntimeException){
+				excToThrow = (RuntimeException) e.getCause().getCause();
+			}
+			throw excToThrow;
+		}
         String docUUID = (String) proc.getProcessVariables().get("docUUID");
         DocumentCargo retDoc = new DocumentCargo();
         retDoc.setUuid(docUUID);
