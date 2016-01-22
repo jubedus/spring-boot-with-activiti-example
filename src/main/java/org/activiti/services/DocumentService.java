@@ -14,6 +14,10 @@ public class DocumentService {
 		System.out.println("Setting default values in service ...");
 	}
 	
+	public void deleteDocument(DocumentCargo doc){
+		System.out.println("Deleting document in service ...");
+	}
+	
 	public String importIntoEDM(DocumentCargo doc){
 		System.out.println("Importing in service ...");
 		doc.setUuid("12");

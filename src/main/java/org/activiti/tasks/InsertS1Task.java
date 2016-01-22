@@ -1,6 +1,7 @@
 package org.activiti.tasks;
 
 import org.activiti.cargo.DocumentCargo;
+import org.activiti.engine.delegate.BpmnError;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.services.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class InsertS1Task {
 	        String docUUID = (String) execution.getVariable("docUUID");	        
 	        System.out.println("Doc UUID ="+docUUID);
 	        
-	        return docService.insertIntoS1(doc);
+	        if("invalidS1".equalsIgnoreCase(doc.getType())){
+	        	 System.out.println("Failed import into S1");
+	        	throw new BpmnError("S1ImportFailed");
+	        }else{
+	        	 return docService.insertIntoS1(doc);
+	        }
 	    }
 }

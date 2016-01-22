@@ -18,6 +18,12 @@
     <serviceTask id="taskConstructName" name="Construct Document Name" activiti:expression="#{constructNameTask.process(execution)}"></serviceTask>
     <sequenceFlow id="flow9" sourceRef="taskValidateValues" targetRef="taskConstructName"></sequenceFlow>
     <sequenceFlow id="flow10" sourceRef="taskConstructName" targetRef="taskImportDoc"></sequenceFlow>
+    <boundaryEvent id="errS1ImportFailed" name="S1 Import Failed" attachedToRef="taskCreateS1">
+      <errorEventDefinition errorRef="S1ImportFailed"></errorEventDefinition>
+    </boundaryEvent>
+    <serviceTask id="taskDeleteDoc" name="Delete Document" activiti:expression="#{deleteDocTask.process(execution)}"></serviceTask>
+    <sequenceFlow id="flow11" sourceRef="errS1ImportFailed" targetRef="taskDeleteDoc"></sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="taskDeleteDoc" targetRef="endevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_documentIngestion">
     <bpmndi:BPMNPlane bpmnElement="documentIngestion" id="BPMNPlane_documentIngestion">
@@ -39,6 +45,9 @@
       <bpmndi:BPMNShape bpmnElement="taskCreateS1" id="BPMNShape_taskCreateS1">
         <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="210.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="errS1ImportFailed" id="BPMNShape_errS1ImportFailed">
+        <omgdc:Bounds height="30.0" width="30.0" x="170.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="taskValidateRequiredBySource" id="BPMNShape_taskValidateRequiredBySource">
         <omgdc:Bounds height="71.0" width="105.0" x="240.0" y="100.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -47,6 +56,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="taskConstructName" id="BPMNShape_taskConstructName">
         <omgdc:Bounds height="63.0" width="133.0" x="530.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="taskDeleteDoc" id="BPMNShape_taskDeleteDoc">
+        <omgdc:Bounds height="55.0" width="105.0" x="120.0" y="319.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="65.0" y="135.0"></omgdi:waypoint>
@@ -79,6 +91,14 @@
       <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
         <omgdi:waypoint x="530.0" y="237.0"></omgdi:waypoint>
         <omgdi:waypoint x="405.0" y="237.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="185.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="172.0" y="319.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="172.0" y="319.0"></omgdi:waypoint>
+        <omgdi:waypoint x="57.0" y="255.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
